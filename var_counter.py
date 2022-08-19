@@ -1,4 +1,5 @@
     #!/bin/env python3
+# modified from Devin Gregory https://github.com/degregory/Programs/blob/main/NYC_Variant_Counter.py
 
 import os
 import sys
