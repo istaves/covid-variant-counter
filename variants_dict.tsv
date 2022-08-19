@@ -1,4 +1,4 @@
-Variant name	# required	SNPs
+Variant name	tolerance #	SNPs
 Alpha	0	N501Y,A570D
 Beta	0	K417N,E484K,N501Y
 Gamma	0	K417T,E484K,N501Y
