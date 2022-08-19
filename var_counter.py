@@ -34,7 +34,7 @@ with open("variants_dict.tsv", "r") as variantstsv:
     variants = csv.reader(variantstsv,delimiter='\t')
     next(tsvreader)
     for line in tsvreader:
-        variants_dict[line[0]] = [line[1],line[2:]]
+        variants_dict[line[0]] = [line[1],line[2].split(',')]
 
 print(variants_dict)
 
