@@ -4,7 +4,6 @@
 import os
 import sys
 import csv
-
 print("Variant Counter")
 variants_dict = {}
 
@@ -19,13 +18,14 @@ except IOError as error:
     print("- Error reading variant dictionary!")
 # print(variants_dict)
 
-# wastewater treatment facilities
-
+path = input("- Enter path to files: ").replace("\\","/")
+if path[-1] != '/':
+    path += '/'
 
 WWTPs = {}
 Mixed = {}
 
-files = [file for file in os.listdir(os.getcwd()) if (file.lower()).endswith('chim_rm.tsv') and not 'Collected' in file]
+files = [file for file in os.listdir(path) if (file.lower()).endswith('chim_rm.tsv') and not 'Collected' in file]
 indexedfiles = {}
 dates = [*set([file[2:8] for file in files])]
 dates.sort()
@@ -39,7 +39,7 @@ for date in dates:
 print("- Successfully wrote files:")
 for date in dates:
     for file in indexedfiles[date]: #loops over fileNAMES in current wd
-        in_file = open(file, "r")
+        in_file = open(path + file, "r")
         wwtp = file[:2]
         try:
             WWTPs[wwtp]
@@ -91,7 +91,7 @@ for date in dates:
         in_file.close()
 
 
-    outfile = open(date+"_variant_counts.tsv", "w")
+    outfile = open(path+date+"_variant_counts.tsv", "w")
     outfile.write("WWTP\tDate\tVirus Concentration (virus copies/L)\tNumber of Reads\tFlow rate (to be provided by DEP)\tiSeq/MiSeq\tSRA Accession\tAlpha N501Y+A570D")
     outfile.write("\tBeta K417N+E484K+N501Y\tGamma K417T+E484K+N501Y\tDelta L452R+T478K")
     outfile.write("\tKappa L452R+E484Q\tLambda L452R+F590S\tOmicron BA.1\tOmicron BA.2\tOmicron BA.2.12.1\tOmicron BA.4/5")
@@ -109,3 +109,6 @@ for date in dates:
     
     outfile.close()
     print("   "+date+"_variant_counts.tsv")
+
+
+input("Press ENTER to exit...")
