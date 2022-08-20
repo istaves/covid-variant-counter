@@ -25,7 +25,7 @@ if path[-1] != '/':
 WWTPs = {}
 Mixed = {}
 
-files = [file for file in os.listdir(path) if (file.lower()).endswith('chim_rm.tsv') and not 'Collected' in file]
+files = [file for file in os.listdir(path) if ((file.lower()).endswith('chim_rm.tsv') or (file.lower()).endswith('covar_deconv.tsv')) and not 'Collected' in file]
 indexedfiles = {}
 dates = [*set([file[2:8] for file in files])]
 dates.sort()
@@ -34,11 +34,11 @@ for date in dates:
 
 print("- Found data on:")
 for date in dates:
-    print(f"   {date[:2]}.{date[2:4]}.{date[4:]} from WWTPs {', '.join([file[:2] for file in indexedfiles[date]])}")
+    print(f"   {date[:2]}.{date[2:4]}.{date[4:]} from WWTPs {', '.join([*set([file[:2] for file in indexedfiles[date]])])}")
 
 print("- Successfully wrote files:")
 for date in dates:
-    for file in indexedfiles[date]: #loops over fileNAMES in current wd
+    for file in indexedfiles[date]:
         in_file = open(path + file, "r")
         wwtp = file[:2]
         try:
@@ -51,43 +51,39 @@ for date in dates:
             Mixed[wwtp]
         except:
             Mixed[wwtp] = ''
-        for line in in_file:
+        reader = csv.reader(in_file,delimiter="\t")
+        next(reader)
+        next(reader)
+        for line in reader:
+            matches = []
+            for variant in variants_dict:
+                check = 0
+                for SNP in variants_dict[variant][1]:
+                    if SNP[0]=="!":
+                        if SNP[1:] in line[0]:
+                            check += 1
+                    elif SNP not in line[0]:
+                        check += 1
+                if check <= variants_dict[variant][0]:
+                    matches.append(variant)
+            if len(matches) > 1:
+                if not "'" + line[0] + "'" in Mixed[wwtp]:
+                    Mixed[wwtp] = "'" + line[0] + "', "
+                try:
+                    WWTPs[wwtp]["Mixed"] += float(line[1])
+                except:
+                    WWTPs[wwtp]["Mixed"] = float(line[1])
+            elif matches:
+                try:
+                    WWTPs[wwtp][matches[0]] += float(line[1])
+                except:
+                    WWTPs[wwtp][matches[0]] = float(line[1])
+            else:
+                try:
+                    WWTPs[wwtp]["Other"] += float(line[1])
+                except:
+                    WWTPs[wwtp]["Other"] = float(line[1])
 
-            reader = csv.reader(in_file,delimiter="\t")
-            next(reader)
-            next(reader)
-            for line in reader:
-                matches = []
-                for variant in variants_dict:
-                    check = 0
-                    for SNP in variants_dict[variant][1]:
-                        if SNP[0]=="!" and SNP[1:] in line[0]:
-                            check += 1
-                        elif SNP not in line[0]:
-                            check += 1
-                        if check <= variants_dict[variant][0]:
-                            matches.append(variant)
-                if len(matches) > 1:
-                    #print(wwtp)
-                    #print(line + " matches " + " ".join(matches))
-                    if not "'" + line[0] + "'" in Mixed[wwtp]:
-                        Mixed[wwtp] = "'" + line[0] + "', "
-                    try:
-                        WWTPs[wwtp]["Mixed"] += float(line[1])
-                    except:
-                        WWTPs[wwtp]["Mixed"] = float(line[1])
-                elif matches:
-                    try:
-                        WWTPs[wwtp][matches[0]] += float(line[1])
-                    except:
-                        WWTPs[wwtp][matches[0]] = float(line[1])
-                else:
-                    # print(line + " matches " + " none ")
-                    try:
-                        WWTPs[wwtp]["Other"] += float(line[1])
-                    except:
-                        WWTPs[wwtp]["Other"] = float(line[1])
-                        
         in_file.close()
 
 
@@ -103,10 +99,10 @@ for date in dates:
         outfile.write(f"{wwtp}\t{date}\t\t{total}\t\tMiSeq\t\t")
         for variant in WWTPs[wwtp]:
             outfile.write(f"{(WWTPs[wwtp][variant] / total):.3f}\t ")
-        
+
         outfile.write(Mixed[wwtp])
         outfile.write("\n")
-    
+
     outfile.close()
     print("   "+date+"_variant_counts.tsv")
 
