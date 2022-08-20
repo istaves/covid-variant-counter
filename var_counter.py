@@ -95,13 +95,13 @@ for date in dates:
         in_file.close()
 
     outfile = open(path+date+"_variant_counts.tsv", "w")
-    outfile.write("Code\tDate\tVirus Concentration (virus copies/L)\tNumber of Reads\tFlow rate (to be provided by DEP)\tSRA Accession")
+    outfile.write("Code\tDate\tNumber of Reads")
     for variant in variants_dict:
         outfile.write("\t" + variant)
-    outfile.write("\tMixed\tMixed sequences\tOther\tOther sequences\tComments\n")
+    outfile.write("\tMixed\tMixed variants\tOther\tOther variants\tComments\n")
     for wwtp in WWTPs:
         total = int(sum(WWTPs[wwtp].values()))
-        outfile.write(f"{wwtp}\t{date}\t\t{total}\t\t\t")
+        outfile.write(f"{wwtp}\t{date}\t{total}\t")
         for variant in variants_dict:
             outfile.write(f"{(WWTPs[wwtp][variant] / total):.3f}\t ")
         outfile.write(f"{(WWTPs[wwtp]['Mixed'] / total):.3f}\t{Mixed[wwtp]}\t")
