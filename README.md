@@ -4,7 +4,7 @@ Modified from https://github.com/degregory/Programs/blob/main/NYC_Variant_Counte
 Calculates the abundancies of covid variants.
 
 ## Usage 
-Download [the needed files](https://github.com/istaves/covid-variant-counter/releases/download/release/Covid.variant.counter.zip) and extract them.
+Download [the python script](https://github.com/istaves/covid-variant-counter/releases/download/release/var_counter.py) and [the sample dictionary](https://github.com/istaves/covid-variant-counter/releases/download/release/dictionary.csv) (or modify/create your own) and put them in the same directory.
 Run var_counter.py. The program will ask for the directory that you'd like the program to work on. It will put its output files into that directory as well.
 
 ## Variant dictionary
