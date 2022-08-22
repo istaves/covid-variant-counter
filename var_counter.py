@@ -5,6 +5,7 @@ import os
 import sys
 import csv
 
+### READ IN VARIANT DICTIONARY ###
 print("Variant Counter")
 variants_dict = {}
 dir_path = os.path.dirname(os.path.realpath(__file__)).replace("\\","/")
@@ -18,6 +19,7 @@ try:
 except IOError as error:
     sys.exit("- Error reading variant dictionary!")
 
+### PROMPT FOR INPUT DIRECTORY ###
 path = input("- Enter path to files: ").replace("\\", "/")
 if path[-1] != "/":
     path += "/"
@@ -26,6 +28,7 @@ WWTPs = {}
 Mixed = {}
 Other = {}
 
+### GET LIST OF VALID INPUT FILES ###
 files = [
     file
     for file in os.listdir(path)
@@ -35,6 +38,8 @@ files = [
     )
     and not "Collected" in file
 ]
+
+### PARSE METADATA FROM FILENAMES ###
 indexedfiles = {}
 dates = [*set([file[2:8] for file in files])]
 dates.sort()
@@ -48,10 +53,11 @@ for date in dates:
     )
 
 print("- Successfully wrote files:")
-for date in dates:
+for date in dates: # loop to create seperate output for each date
+    ### PROCESS DATA ###
     for file in indexedfiles[date]:
         in_file = open(path + file, "r")
-        wwtp = file[:2]
+        wwtp = file[:2] # initialize data from this WWTP
         try:
             WWTPs[wwtp]
         except:
@@ -71,7 +77,7 @@ for date in dates:
         reader = csv.reader(in_file, delimiter="\t")
         next(reader)
         next(reader)
-        for line in reader:
+        for line in reader: # search for matches
             matches = []
             for variant in variants_dict:
                 check = 0
@@ -83,19 +89,19 @@ for date in dates:
                         check += 1
                 if check <= variants_dict[variant][0]:
                     matches.append(variant)
-            if len(matches) > 1:
+            if len(matches) > 1: # if matches multiple variants, classify as "mixed" and record sequence data
                 if not "'" + line[0] + "'" in Mixed[wwtp]:
                     Mixed[wwtp] += "'" + line[0] + "', "
                 try:
                     WWTPs[wwtp]["Mixed"] += float(line[1])
                 except:
                     WWTPs[wwtp]["Mixed"] = float(line[1])
-            elif matches:
+            elif matches: # if matches one variant, classify accordingly
                 try:
                     WWTPs[wwtp][matches[0]] += float(line[1])
                 except:
                     WWTPs[wwtp][matches[0]] = float(line[1])
-            else:
+            else: # if matches no variants, classify as "other" and record sequence data
                 if not "'" + line[0] + "'" in Other[wwtp]:
                     Other[wwtp] += "'" + line[0] + "', "
                 try:
@@ -104,6 +110,7 @@ for date in dates:
                     WWTPs[wwtp]["Other"] = float(line[1])
         in_file.close()
 
+    ### WRITE OUTPUT FILES ###
     outfile = open(path + date + "_variant_counts.tsv", "w")
     outfile.write("Code\tDate\tNumber of Reads")
     for variant in variants_dict:
