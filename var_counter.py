@@ -2,20 +2,21 @@
 # modified from Devin Gregory https://github.com/degregory/Programs/blob/main/NYC_Variant_Counter.py
 
 import os
+import sys
 import csv
 
 print("Variant Counter")
 variants_dict = {}
-dir_path = os.path.dirname(os.path.realpath(__file__))
+dir_path = os.path.dirname(os.path.realpath(__file__)).replace("\\","/")
 try:
-    with open(dir_path + "\\dictionary.csv", "r") as dictcsv:
+    with open(dir_path + "/dictionary.csv", "r") as dictcsv:
         variants = csv.reader(dictcsv)
         next(variants)
         for line in variants:
             variants_dict[line[0]] = [int(line[1]), line[2].split()]
     print("- Successfully read variant dictionary.")
 except IOError as error:
-    print("- Error reading variant dictionary!")
+    sys.exit("- Error reading variant dictionary!")
 
 path = input("- Enter path to files: ").replace("\\", "/")
 if path[-1] != "/":

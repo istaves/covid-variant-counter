@@ -7,17 +7,17 @@ Modified from
 
 1. Be sure `python` is installed.
 2. Download
-   [var_counter.py](https://github.com/istaves/covid-variant-counter/releases/download/release/var_counter.py).
+   [`var_counter.py`](https://github.com/istaves/covid-variant-counter/releases/download/release/var_counter.py).
 3. Be sure a file with information about the variants you'd like to search for,
    called `dictionary.csv` (see below), is in the same directory as the python
    script. An example is provided here:
-   [dictionary.csv](https://github.com/istaves/covid-variant-counter/releases/download/release/dictionary.csv)
+   [`dictionary.csv`](https://github.com/istaves/covid-variant-counter/releases/download/release/dictionary.csv)
 
-and
-[the sample dictionary](https://github.com/istaves/covid-variant-counter/releases/download/release/dictionary.csv)
-(or modify/create your own) and put them in the same directory. Run
-`var_counter.py`. The program will ask for the directory that you'd like the
-program to work on. It will put its output files into that directory as well.
+## Usage
+
+1. Run `var_counter.py` (this can be done directly through the file explorer or
+   by running `python var_counter.py` from a terminal).
+2. If the script can find the file `dictionary.csv`, it will prompt for the directory to the data you'd like to process.
 
 ## Variant dictionary
 
