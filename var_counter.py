@@ -8,7 +8,13 @@ import csv
 ### READ IN VARIANT DICTIONARY ###
 print("Variant Counter")
 variants_dict = {}
-dir_path = os.path.dirname(os.path.realpath(__file__)).replace("\\", "/")
+if getattr(sys, 'frozen', False):
+    dir_path = os.path.dirname(os.path.realpath(sys.executable)).replace("\\", "/")
+elif __file__:
+    dir_path = os.path.dirname(os.path.realpath(__file__)).replace("\\", "/")
+else:
+    sys.exit("- Error getting current directory")
+
 try:
     with open(dir_path + "/dictionary.csv", "r") as dictcsv:
         variants = csv.reader(dictcsv)
