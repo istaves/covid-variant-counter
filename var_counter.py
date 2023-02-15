@@ -5,6 +5,7 @@ import os
 import sys
 import csv
 
+exitmsg = "Press ENTER to exit..."
 ### READ IN VARIANT DICTIONARY ###
 print("Variant Counter")
 variants_dict = {}
@@ -13,7 +14,9 @@ if getattr(sys, 'frozen', False):
 elif __file__:
     dir_path = os.path.dirname(os.path.realpath(__file__)).replace("\\", "/")
 else:
-    sys.exit("- Error getting current directory")
+    print("- Error getting current directory!")
+    input(exitmsg)
+    sys.exit(1)
 
 try:
     with open(dir_path + "/dictionary.csv", "r") as dictcsv:
@@ -23,12 +26,34 @@ try:
             variants_dict[line[0]] = [int(line[1]), line[2].split()]
     print("- Successfully read variant dictionary.")
 except IOError as error:
-    sys.exit("- Error reading variant dictionary!")
+    print("- Error reading variant dictionary!")
+    input(exitmsg)
+    sys.exit(1)
 
 ### PROMPT FOR INPUT DIRECTORY ###
-path = input("- Enter path to files: ").replace("\\", "/")
-if path[-1] != "/":
-    path += "/"
+try:
+    path = input("- Enter path to files: ").replace("\\", "/")
+    if path[-1] != "/":
+        path += "/"
+    ### GET LIST OF VALID INPUT FILES ###
+    files = [
+        file
+        for file in os.listdir(path)
+        if (
+            (file.lower()).endswith("chim_rm.tsv")
+            or (file.lower()).endswith("covar_deconv.tsv")
+        )
+        and not "Collected" in file
+    ]
+except:
+    print("- Error opening directory!")
+    input(exitmsg)
+    sys.exit(1)
+
+if not files:
+    print("- No files were found!")
+    input(exitmsg)
+    sys.exit(0)
 
 rows = {}
 header = (
@@ -36,17 +61,6 @@ header = (
     + [var for var in variants_dict]
     + ["Mixed", "Mixed variants", "Other", "Other variants"]
 )
-
-### GET LIST OF VALID INPUT FILES ###
-files = [
-    file
-    for file in os.listdir(path)
-    if (
-        (file.lower()).endswith("chim_rm.tsv")
-        or (file.lower()).endswith("covar_deconv.tsv")
-    )
-    and not "Collected" in file
-]
 
 ids = sorted([*set([f[:8] for f in files])])
 for i in ids:
@@ -69,7 +83,12 @@ for date in sorted([*set([i[2:8] for i in ids])]):
 
 ### PROCESS DATA ###
 for file in files:
-    in_file = open(path + file, "r")
+    try:
+        in_file = open(path + file, "r")
+    except:
+        print("- Error opening " + file + "!")
+        input(exitmsg)
+        sys.exit(1)
     id = file[:8]
     reader = csv.reader(in_file, delimiter="\t")
     next(reader)
@@ -100,14 +119,19 @@ for file in files:
     in_file.close()
 
 ### WRITE OUTPUT FILES ###
-with open(path + "variant_counts.tsv", "w") as f:
-    writer = csv.DictWriter(f, fieldnames=header, delimiter="\t")
-    writer.writeheader()
-    for id in rows:
-        for var in [i for i in variants_dict] + ["Mixed", "Other"]:
-            rows[id][var] = round((rows[id][var] / rows[id]["Number of Reads"]), 3)
-        writer.writerow(rows[id])
+try:
+    with open(path + "variant_counts.tsv", "w", newline='') as f:
+        writer = csv.DictWriter(f, fieldnames=header, delimiter="\t")
+        writer.writeheader()
+        for id in rows:
+            for var in [i for i in variants_dict] + ["Mixed", "Other"]:
+                rows[id][var] = round((rows[id][var] / rows[id]["Number of Reads"]), 3)
+            writer.writerow(rows[id])
+except:
+    print("- Error writing to variant_counts.tsv!")
+    input(exitmsg)
+    sys.exit(1)
 
 print("- Successfully wrote file variant_counts.tsv")
 
-input("Press ENTER to exit...")
+input(exitmsg)
