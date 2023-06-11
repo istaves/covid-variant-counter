@@ -5,25 +5,19 @@ Modified from
 
 ## Setup
 
-1. Be sure `python` is installed.
-2. Download
-   [`var_counter.py`](https://github.com/istaves/covid-variant-counter/releases/download/release/var_counter.py).
-3. Be sure a file with information about the variants you'd like to search for,
-   called `dictionary.csv` (see [below](#variant-dictionary)), is in the same
-   directory as the python script. An example is provided here:
-   [`dictionary.csv`](https://github.com/istaves/covid-variant-counter/releases/download/release/dictionary.csv)
+### Windows
+On Windows, you can download a portable version (i.e., a `.exe` file that can be run without installation or other requirements) from the [latest release](https://github.com/istaves/covid-variant-counter/releases/latest).
+
+### MacOS and other systems
+For now, there is no package on systems other than Windows. In the meantime, you can download and run the `.py` file (from the [latest release](https://github.com/istaves/covid-variant-counter/releases/latest)) as long as Python is installed.
 
 ## Usage
 
-1. Run `var_counter.py` (this can be done directly through the file explorer or
-   by running `python var_counter.py` from a terminal).
-2. If the script can find the file `dictionary.csv`, it will prompt for the
-   directory to the data (see [below](#input-data)) you'd like to process (on
-   Windows this might look something like `C:\folder1\folder2\...` otherwise it
-   might look something like `/home/folder1/folder2/...`). Enter this into the
-   terminal window and press `enter`.
-3. The script will print a list of the output files in `.tsv` format. These will
-   be in the same directory as the input files.
+1. Run the program (either the Windows executable or Python script, as described above).
+2. Press "Choose dictionary file:" and browse to the dictionary file (see [Variant Dictionary](#variant-dictionary)). Usually you won't have to do this step, since the program will remember the dictionary file that was used on the last run.
+3. Press "Choose input directory:" and navigate to the directory with the input files you'd like to process (see [Input Data](#input-data))
+4. Press "Save output as:" to tell the program where to save the output, in `.tsv` format.
+5. Press "Run".
 
 ## Variant dictionary
 
@@ -50,3 +44,7 @@ data. Currently, it:
    example, `GR220718_Michigan_H08_S92_L001_covar_deconv.tsv`.
 
 (the `.tsv` input files should have data starting from the third row, with sequences in the first column and counts in the second column).
+
+## Notes
+
+* The program will create a file in its directory called `pref.dat`. All this does is remember the last dictionary file that was used, so it doesn't need to be chosen every time - so don't worry if it gets deleted.
