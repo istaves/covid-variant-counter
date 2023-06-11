@@ -16,7 +16,7 @@ def savefile():
     entry3.xview_moveto(1)
 
 def close():
-    pickle.dump(dfname.get(),open("save.p", "wb"))
+    pickle.dump(dfname.get(),open("pref.dat", "wb"))
     root.destroy()
 
 def logprint(text):
@@ -154,7 +154,7 @@ if __name__ == '__main__':
     ofname = StringVar()
 
     try:
-        dfname.set(pickle.load(open( "save.p", "rb" )))
+        dfname.set(pickle.load(open( "pref.dat", "rb" )))
     except:
         pass
 
