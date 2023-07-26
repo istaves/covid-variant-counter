@@ -51,7 +51,7 @@ position 368 there must not be a **mutation** to isoleucine.
 | 356   | ! |   | T |
 | 368   | ! |!I |!I |
 
-(Of course, more rows would be necessary to properly differentiate between X and Y, and Y and Z).
+(Of course, more rows would be necessary to properly differentiate between variants X and Y and variants Y and Z).
 
 ## Input data
 
