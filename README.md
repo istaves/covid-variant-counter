@@ -32,6 +32,38 @@ separated by spaces (` `). Any SNP that should NOT be present in the variant
 should be prepended with an exclamation point (`!`). For an example,
 [`dictionary.csv`](https://github.com/istaves/covid-variant-counter/releases/download/release/dictionary.csv).
 
+The dictionary takes the form of a table. The column headers (entries in the first row)
+are the variant names and the row headers (in the first colomn) are positions.
+
+In the approprate cells...
+* an exclamation point (`!`) means that there should be 
+no mutation from the wild type
+* a single-letter amino acid code (e.g., `R`) means that there should be a **mutation from the wild type**
+to the indicated amino acid
+* an exclamation point and a single-letter code (e.g., `!R`) means that there should not be
+a **mutation from the wild type** to the indicated amino acid (i.e., there might be no mutation or
+a different mutation)
+* an asterisk (`*`) means that there should be a (any) mutation
+...at that position (in the row header) in order for a sequence to be identified as that variant
+(in the column header). A space (` `) means that position is not necessary to identify that variant.
+
+For example, in the table below, in order for a sequence to be identified as Variant X, at position
+339 the amino acid must be **mutated** from the wild type to aspartic acid, and at positions 356 and 368
+the amino acid must be the same as the wild type. In order for a sequence to be identified as Variant Y,
+at position 339 the amino acid must be changed from the wild type, and at position 368 there must not
+be a **mutation** to isoleucine. In order for a sequence to be identified as Variant Z, there must be
+a **mutation** to histidine at position 339, a **mutation** to threonine at position 356, and at
+position 368 there must not be a **mutation** to isoleucine.
+
+|       | X | Y | Z |
+|-------|---|---|---|
+| 339   | D | * | H |
+| 356   | ! |   | T |
+| 368   | ! |!I |!I |
+|⋮|⋮|⋮|⋮|
+
+(Of course, more rows would be necessary to properly differentiate between X and Y, and Y and Z).
+
 ## Input data
 
 The script should be pointed to a folder that contains `.tsv` files of input
