@@ -33,6 +33,7 @@ to the indicated amino acid
 a **mutation from the wild type** to the indicated amino acid (i.e., there might be no mutation or
 a different mutation)
 * an asterisk (`*`) means that there should be a (any) mutation
+
 ...at that position (in the row header) in order for a sequence to be identified as that variant
 (in the column header). A space (` `) means that position is not necessary to identify that variant.
 
