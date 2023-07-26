@@ -21,7 +21,7 @@ For now, there is no package on systems other than Windows. In the meantime, you
 
 ## Variant dictionary
 
-The dictionary takes the form of a table. The column headers (entries in the first row)
+The dictionary takes the form of a table store as a `.csv` file. The column headers (entries in the first row)
 are the variant names and the row headers (in the first colomn) are positions.
 
 In the approprate cells...
