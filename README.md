@@ -21,17 +21,6 @@ For now, there is no package on systems other than Windows. In the meantime, you
 
 ## Variant dictionary
 
-The dictionary can be as long or as short as desired, depending on the number of
-variants that should be searched for. The first field on each line is the
-variant name (each name entered here will be a column header in the output
-files, so they should be descriptive enough to be understood). The second field
-is the tolerance of the search (i.e., a tolerance of `0` means that all criteria
-must match in order to classify as that variant, a tolerance of `1` means that
-one can be missing, etc.). The third field is a list of strings to search for
-separated by spaces (` `). Any SNP that should NOT be present in the variant
-should be prepended with an exclamation point (`!`). For an example,
-[`dictionary.csv`](https://github.com/istaves/covid-variant-counter/releases/download/release/dictionary.csv).
-
 The dictionary takes the form of a table. The column headers (entries in the first row)
 are the variant names and the row headers (in the first colomn) are positions.
 
@@ -60,7 +49,6 @@ position 368 there must not be a **mutation** to isoleucine.
 | 339   | D | * | H |
 | 356   | ! |   | T |
 | 368   | ! |!I |!I |
-|⋮|⋮|⋮|⋮|
 
 (Of course, more rows would be necessary to properly differentiate between X and Y, and Y and Z).
 
